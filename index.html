@@ -5,140 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Metheorized | Minecraft Community</title>
     <style>
-        :root {
-            --discord-blue: #5865F2;
-            --mc-red: #ff4d4d;
-            --bg-dark: #0d1117;
-        }
-
-        body { 
-            background: var(--bg-dark); 
-            color: #ffffff; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        /* --- THE BACKGROUND LAYER --- */
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        
+        /* BACKGROUND SETTINGS */
         .bg-image {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            /* Replace 'background-image.jpg' with your actual file name */
-            background-image: url('logo.png'); 
-            background-size: cover;
-            background-position: center;
-            filter: blur(8px) brightness(30%); /* MAKES IT BLURRY AND DARK */
-            z-index: -1; /* Puts it behind everything */
-            transform: scale(1.1); /* Prevents white edges from the blur */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('5n7d5jvred461.jpg') center/cover;
+            filter: blur(8px) brightness(25%);
+            z-index: -1; transform: scale(1.1);
         }
 
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        
+        h1 { 
+            font-size: 4em; letter-spacing: 8px; color: #ff4d4d; margin: 0; 
+            text-shadow: 0 0 30px rgba(255, 77, 77, 0.6); 
+            animation: fadeIn 2s ease-in;
         }
 
-        h1 { font-size: 3.5em; margin-bottom: 10px; letter-spacing: 5px; color: var(--mc-red); text-shadow: 0 0 20px rgba(255, 77, 77, 0.5); }
+        /* CUSTOM DISCORD BUTTON */
+        .discord-btn {
+            display: inline-block; margin-top: 30px; transition: 0.4s;
+            filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.2));
+            animation: pulse 2.5s infinite;
+        }
 
+        .discord-btn img { width: 350px; border-radius: 15px; }
+
+        .discord-btn:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 25px rgba(88, 101, 242, 0.8));
+        }
+
+        /* ONLINE STATUS */
         .online-status {
             display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(0, 255, 0, 0.3);
-            padding: 8px 20px; border-radius: 20px; margin-bottom: 30px; backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 255, 0, 0.3);
+            padding: 10px 25px; border-radius: 30px; margin: 20px; color: #3ba55c; font-weight: bold;
+            backdrop-filter: blur(5px);
         }
-        .dot { width: 10px; height: 10px; background: #3ba55c; border-radius: 50%; box-shadow: 0 0 10px #3ba55c; }
-        
-        .btn-join {
-            display: inline-block; background: var(--discord-blue); color: white;
-            padding: 20px 60px; text-decoration: none; font-weight: bold;
-            border-radius: 12px; font-size: 1.4em; transition: 0.3s;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
-        }
-        .btn-join:hover { background: #4752c4; transform: translateY(-3px); box-shadow: 0 6px 30px rgba(88, 101, 242, 0.4); }
 
         /* SCROLL SECTIONS */
-        .section {
-            padding: 120px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s ease-out;
-        }
-
+        .section { padding: 120px 20px; text-align: center; opacity: 0; transform: translateY(50px); transition: 1.2s; }
         .section.show { opacity: 1; transform: translateY(0); }
+        .box { background: rgba(22, 27, 34, 0.8); padding: 50px; border-radius: 25px; max-width: 700px; margin: auto; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .box {
-            background: rgba(22, 27, 34, 0.8); /* See-through dark boxes */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px); /* Glass effect */
+        /* ANIMATIONS */
+        @keyframes pulse {
+            0% { filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.3)); }
+            50% { filter: drop-shadow(0 0 20px rgba(88, 101, 242, 0.6)); }
+            100% { filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.3)); }
         }
-
-        h2 { color: var(--mc-red); font-size: 2.2em; margin-top: 0; }
-        p { color: #d1d5db; line-height: 1.8; font-size: 1.15em; }
-
-        .footer { padding: 60px; text-align: center; color: #555; font-size: 0.8em; letter-spacing: 1px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-
     <div class="bg-image"></div>
 
     <div class="hero">
         <h1>METHEORIZED</h1>
-        <div class="online-status">
-            <span class="dot"></span>
-            <span class="count-text"><span id="online-count">--</span> Online Now</span>
-        </div>
-        <a href="https://discord.gg/tUCfNwmWhD" class="btn-join">JOIN NOW</a>
+        <div class="online-status">● <span id="online-count">--</span> Players Online</div>
+        
+        <a href="https://discord.gg/tUCfNwmWhD" class="discord-btn">
+            <img src="discord.webp" alt="Join Our Discord">
+        </a>
     </div>
 
     <div class="section">
-        <h2>Performance Community</h2>
         <div class="box">
-            <p>Metheorized is the #1 hub for Minecraft optimization and competitive play. Join thousands of players fine-tuning their systems for the ultimate low-latency experience.</p>
+            <h2 style="color:#ff4d4d; font-size: 2.2em;">The 2026 Optimizer</h2>
+            <p style="font-size: 1.2em; line-height: 1.6; color: #ccc;">Experience zero input lag and maximum frame stability with the <b>Metheorized Omni-Optimizer</b>[cite: 9, 11]. Specifically tuned for competitive Minecraft.</p>
+            <a href="metheorized.bat" style="color:#ff4d4d; text-decoration:none; font-weight:bold; font-size: 1.3em;" download>Download Script →</a>
         </div>
     </div>
-
-    <div class="section">
-        <h2>Omni-Optimizer 2026</h2>
-        <div class="box">
-            [cite_start]<p>Our exclusive <code>metheorized.bat</code> script targets CPU scheduling [cite: 3][cite_start], network throttling[cite: 4], and GPU preemption to ensure 1% lows are a thing of the past.</p>
-            <a href="metheorized.bat" style="color:var(--mc-red); text-decoration:none; font-weight:bold; display:block; margin-top:20px;" download>Download Script →</a>
-        </div>
-    </div>
-
-    <div class="footer">METHEORIZED // EST. 2026</div>
 
     <script>
-        // Update with your real ID from Discord Settings > Widget
-        const SERVER_ID = '1472191287691313337'; 
-
-        async function getDiscordOnline() {
+        const SERVER_ID = '1238549669524045865'; 
+        async function getStats() {
             try {
                 const res = await fetch(`https://discord.com/api/guilds/${SERVER_ID}/widget.json`);
                 const data = await res.json();
                 document.getElementById('online-count').innerText = data.presence_count || '0';
-            } catch (err) { document.getElementById('online-count').innerText = '0'; }
+            } catch(e) { document.getElementById('online-count').innerText = '0'; }
         }
-        getDiscordOnline();
+        getStats();
 
-        // Scroll Reveal
-        const sections = document.querySelectorAll('.section');
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('show');
-            });
+            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
         }, { threshold: 0.2 });
-
-        sections.forEach(section => observer.observe(section));
+        document.querySelectorAll('.section').forEach(s => observer.observe(s));
     </script>
 </body>
 </html>
