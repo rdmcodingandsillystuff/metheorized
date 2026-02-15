@@ -1,9 +1,10 @@
 @echo off
 setlocal Enabledelayedexpansion
 
-:: --- CLEAN ADMIN ELEVATION ---
+:START
+:: --- AUTO-ADMIN ELEVATION ---
 net session >nul 2>&1
-if %errorLevel% neq 0 (
+if %errorLevel% NEQ 0 (
     echo [!] REQUESTING ADMIN PRIVILEGES...
     powershell -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
     exit /b
@@ -16,10 +17,12 @@ color 0C
 :MENU
 cls
 echo.
-echo  __  __  ____  _____  ____  _____  ____  ____  ____  ____  ____ 
-echo (  \/  )(  __)(_   _)(  __)(  _  )(  _ \(_  _)(_   )(  __)(  _ \
-echo  )    (  ) _)   )(   ) _)  )(_)(  )   / _)(_  / /_  ) _)  )(_) )
-echo (_/\/\_)(____) (__) (____)(_____)(_)\_)(____)(____)(____)(____/ 
+:: Safely prints the ASCII art from the bottom of this file 
+for /f "delims=" %%A in ('findstr /b "::: " "%~f0"') do (
+    set "line=%%A"
+    echo !line:~4!
+)
+
 echo ======================================================================================
 echo    M E T E O R I Z E D   O M N I - O P T I M I Z E R   
 echo ======================================================================================
@@ -40,31 +43,39 @@ goto MENU
 
 :OVERHAUL
 echo.
-echo [1/6] OPTIMIZING CPU SCHEDULING...
+echo [1/6] OPTIMIZING CPU SCHEDULING... [cite: 3, 12]
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f >nul 2>&1
-echo [2/6] BOOSTING GPU PREEMPTION...
+
+echo [2/6] BOOSTING GPU PREEMPTION... [cite: 12]
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f >nul 2>&1
-echo [3/6] TUNING NETWORK STACK...
+
+echo [3/6] TUNING NETWORK STACK... [cite: 12]
 reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >nul 2>&1
 ipconfig /flushdns >nul 2>&1
-echo [4/6] SYSTEM I/O ^& MEMORY TWEAKS...
+
+echo [4/6] SYSTEM I/O ^& MEMORY TWEAKS... [cite: 12]
 fsutil behavior set disablelastaccess 1 >nul 2>&1
 powercfg -h off >nul 2>&1
-echo [5/6] PRESERVING VISUALS...
+
+echo [5/6] PRESERVING VISUALS... [cite: 5, 12]
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_DWORD /d 1 /f >nul 2>&1
-echo [6/6] PURGING BACKGROUND BLOAT...
+
+echo [6/6] PURGING BACKGROUND BLOAT... [cite: 13]
 taskkill /F /IM chrome.exe /T >nul 2>&1
 taskkill /F /IM msedge.exe /T >nul 2>&1
 del /s /f /q %temp%\*.* >nul 2>&1
+
 echo.
-echo OMNI-BOOST COMPLETE!
+echo ======================================================================================
+echo    OMNI-BOOST COMPLETE!
+echo ======================================================================================
 pause
 goto MENU
 
 :PURGE
 echo.
-echo [+] FORCING STANDBY LIST PURGE...
+echo [+] FORCING STANDBY LIST PURGE... [cite: 14]
 powershell -NoProfile -ExecutionPolicy Bypass -Command "[System.GC]::Collect();" >nul 2>&1
 echo [OK] RAM is now fresh.
 pause
@@ -72,7 +83,7 @@ goto MENU
 
 :REVERT
 echo.
-echo [+] REVERTING TO DEFAULT SETTINGS...
+echo [+] REVERTING TO DEFAULT SETTINGS... [cite: 15]
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 2 /f >nul 2>&1
 echo [OK] System set back to Windows Default.
 pause
@@ -81,3 +92,8 @@ goto MENU
 :DISCORD
 start https://discord.gg/tUCfNwmWhD
 goto MENU
+
+:: --- DO NOT EDIT BELOW THIS LINE (ASCII ART DATA) --- [cite: 16]
+::: ▄▄  ▄▄ ▄▄▄▄▄ ▄▄▄▄▄▄ ▄▄ ▄▄ ▄▄▄▄▄  ▄▄▄  ▄▄▄▄  ▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄  
+::: ██▀▄▀██ ██▄▄    ██   ██▄██ ██▄▄  ██▀██ ██▄█▄ ██   ▄█▀ ██▄▄  ██▀██ 
+::: ██   ██ ██▄▄▄   ██   ██ ██ ██▄▄▄ ▀███▀ ██ ██ ██ ▄██▄▄ ██▄▄▄ ████▀
