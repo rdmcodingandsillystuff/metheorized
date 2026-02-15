@@ -35,11 +35,10 @@
             color: #888; text-decoration: none; padding: 12px 20px; border-radius: 8px;
             font-size: 0.85rem; font-weight: 600; transition: 0.3s;
         }
-        .nav-links a:hover, .nav-links a.active { color: #fff; background: rgba(255, 77, 77, 0.1); }
+        .nav-links a:hover { color: #fff; background: rgba(255, 77, 77, 0.1); }
 
         /* --- MAIN CONTENT --- */
         main { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); padding: 0 50px 100px; }
-        
         section { padding-top: 100px; min-height: 80vh; }
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0; }
 
@@ -51,19 +50,12 @@
             max-width: 1000px; margin: 0 auto 40px;
         }
 
-        /* --- CODE BLOCK STYLING --- */
+        /* --- CODE VIEWER --- */
         .code-container {
             background: #0a0a0a; border-radius: 10px; padding: 20px;
-            border: 1px solid #222; overflow-x: auto; position: relative;
+            border: 1px solid #222; overflow-x: auto;
         }
-        pre { margin: 0; color: #d4d4d4; font-family: 'Consolas', monospace; font-size: 0.9rem; line-height: 1.5; }
-        .code-header { font-size: 0.7rem; color: #555; text-transform: uppercase; margin-bottom: 10px; display: flex; justify-content: space-between; }
-
-        /* --- SPECS GRID --- */
-        .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        .spec-item { border-left: 2px solid var(--accent-red); padding-left: 20px; margin-bottom: 20px; }
-        .spec-item h4 { margin: 0 0 5px; color: #eee; }
-        .spec-item p { margin: 0; font-size: 0.85rem; color: #888; line-height: 1.6; }
+        pre { margin: 0; color: #d4d4d4; font-family: 'Consolas', monospace; font-size: 0.85rem; line-height: 1.5; }
 
         .btn-main {
             display: inline-block; padding: 15px 40px; border: 1px solid var(--accent-red);
@@ -81,9 +73,8 @@
         <div class="sidebar-logo">METHEORIZED</div>
         <div class="nav-links">
             <a href="#home">OVERVIEW</a>
-            <a href="#details">TECHNICAL INFO</a>
             <a href="#source">SOURCE CODE</a>
-            <a href="#download">DEPLOYMENT</a>
+            <a href="#download">DOWNLOAD</a>
         </div>
     </aside>
 
@@ -92,53 +83,114 @@
             <h1>Metheorized</h1>
             <p style="letter-spacing: 5px; color: #666; font-weight: bold;">OMNI-OPTIMIZER V4.0</p>
             <div style="color: #3ba55c; font-weight: bold; margin: 20px 0;">● <span id="online-count">--</span> NODES ACTIVE</div>
-            <a href="#download" class="btn-main">INITIALIZE</a>
-        </section>
-
-        <section id="details">
-            <div class="glass-card">
-                <h2 style="color: var(--accent-red);">System Modification Details</h2>
-                <div class="specs-grid">
-                    <div class="spec-item">
-                        <h4>Win32PrioritySeparation</h4>
-                        <p>Sets the hex value to 0x26 (38 decimal). This ensures the CPU gives maximum "time slices" to the active game window, reducing input lag during high-stress scenarios.</p>
-                    </div>
-                    <div class="spec-item">
-                        <h4>GPU Priority Preemption</h4>
-                        <p>Modifies the Multimedia Class Scheduler Service (MMCSS) to rank gaming tasks as "High" priority, preventing frame drops from background system processes.</p>
-                    </div>
-                    <div class="spec-item">
-                        <h4>Nagle's Algorithm</h4>
-                        <p>Disables the TCP delaying mechanism (TCPNoDelay). This forces Windows to send network packets immediately rather than waiting to batch them, resulting in lower ping.</p>
-                    </div>
-                    <div class="spec-item">
-                        <h4>I/O Buffer Tuning</h4>
-                        <p>Disables 'Last Access' timestamping on NTFS drives. This reduces unnecessary disk write cycles every time a game file is read.</p>
-                    </div>
-                </div>
-            </div>
+            <a href="https://discord.gg/tUCfNwmWhD" target="_blank"><img src="discord.webp" style="width:280px; border-radius:15px; margin-top:20px;"></a>
         </section>
 
         <section id="source">
             <div class="glass-card">
-                <h2 style="color: var(--accent-red);">Raw Source Inspection</h2>
-                <p style="font-size: 0.85rem; color: #888; margin-bottom: 20px;">Review the commands executed by the .bat file below.</p>
+                <h2 style="color: var(--accent-red);">Raw Script Inspection</h2>
                 <div class="code-container">
-                    <div class="code-header"><span>metheorized.bat</span> <span>language: batch</span></div>
                     <pre>
 @echo off
-:: Admin Privilege Escalation
+setlocal Enabledelayedexpansion
+
+:START
+:: --- AUTO-ADMIN ELEVATION ---
 net session >nul 2>&1
-if %errorlevel% neq 0 (
-  powershell Start-Process -FilePath '%0' -Verb RunAs
-  exit /b
+if %errorLevel% NEQ 0 (
+    echo [!] REQUESTING ADMIN PRIVILEGES...
+    powershell -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+    exit /b
 )
 
-:: Registry Overhaul
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f
-ipconfig /flushdns
+title METEORIZED OMNI-OPTIMIZER 2026
+mode con: cols=100 lines=45
+color 0C
+
+:MENU
+cls
+echo.
+:: Safely prints the ASCII art from the bottom of this file 
+for /f "delims=" %%A in ('findstr /b "::: " "%~f0"') do (
+    set "line=%%A"
+    echo !line:~4!
+)
+
+echo ======================================================================================
+echo    M E T E O R I Z E D   O M N I - O P T I M I Z E R   
+echo ======================================================================================
+echo    1. RUN TOTAL SYSTEM OVERHAUL
+echo    2. DEEP RAM PURGE
+echo    3. REVERT TO WINDOWS DEFAULTS
+echo    4. JOIN THE DISCORD
+echo    5. EXIT
+echo ======================================================================================
+set /p "choice=Enter Selection: "
+
+if "%choice%"=="1" goto OVERHAUL
+if "%choice%"=="2" goto PURGE
+if "%choice%"=="3" goto REVERT
+if "%choice%"=="4" goto DISCORD
+if "%choice%"=="5" exit
+goto MENU
+
+:OVERHAUL
+echo.
+echo [1/6] OPTIMIZING CPU SCHEDULING... [cite: 3, 12]
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f >nul 2>&1
+
+echo [2/6] BOOSTING GPU PREEMPTION... [cite: 12]
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f >nul 2>&1
+
+echo [3/6] TUNING NETWORK STACK... [cite: 12]
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >nul 2>&1
+ipconfig /flushdns >nul 2>&1
+
+echo [4/6] SYSTEM I/O ^& MEMORY TWEAKS... [cite: 12]
+fsutil behavior set disablelastaccess 1 >nul 2>&1
+powercfg -h off >nul 2>&1
+
+echo [5/6] PRESERVING VISUALS... [cite: 5, 12]
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_DWORD /d 1 /f >nul 2>&1
+
+echo [6/6] PURGING BACKGROUND BLOAT... [cite: 13]
+taskkill /F /IM chrome.exe /T >nul 2>&1
+taskkill /F /IM msedge.exe /T >nul 2>&1
+del /s /f /q %temp%\*.* >nul 2>&1
+
+echo.
+echo ======================================================================================
+echo    OMNI-BOOST COMPLETE!
+echo ======================================================================================
+pause
+goto MENU
+
+:PURGE
+echo.
+echo [+] FORCING STANDBY LIST PURGE... [cite: 14]
+powershell -NoProfile -ExecutionPolicy Bypass -Command "[System.GC]::Collect();" >nul 2>&1
+echo [OK] RAM is now fresh.
+pause
+goto MENU
+
+:REVERT
+echo.
+echo [+] REVERTING TO DEFAULT SETTINGS... [cite: 15]
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 2 /f >nul 2>&1
+echo [OK] System set back to Windows Default.
+pause
+goto MENU
+
+:DISCORD
+start https://discord.gg/tUCfNwmWhD
+goto MENU
+
+:: --- DO NOT EDIT BELOW THIS LINE (ASCII ART DATA) --- [cite: 16]
+::: ▄▄  ▄▄ ▄▄▄▄▄ ▄▄▄▄▄▄ ▄▄ ▄▄ ▄▄▄▄▄  ▄▄▄  ▄▄▄▄  ▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄  
+::: ██▀▄▀██ ██▄▄    ██   ██▄██ ██▄▄  ██▀██ ██▄█▄ ██   ▄█▀ ██▄▄  ██▀██ 
+::: ██   ██ ██▄▄▄   ██   ██ ██ ██▄▄▄ ▀███▀ ██ ██ ██ ▄██▄▄ ██▄▄▄ ████▀
+
                     </pre>
                 </div>
             </div>
@@ -146,9 +198,8 @@ ipconfig /flushdns
 
         <section id="download" style="text-align: center;">
             <div class="glass-card">
-                <h2 style="color: var(--accent-red);">Ready for Deployment?</h2>
-                <p style="color: #888;">Ensure all background applications are closed before running the overhaul.</p>
-                <a href="metheorized.bat" class="btn-main" download>DOWNLOAD EXECUTABLE</a>
+                <h2 style="color: var(--accent-red);">Deployment</h2>
+                <a href="metheorized.bat" class="btn-main" download>DOWNLOAD .BAT</a>
             </div>
         </section>
     </main>
@@ -157,12 +208,13 @@ ipconfig /flushdns
         const SERVER_ID = '1472191287691313337'; 
         async function fetchDiscord() {
             try {
-                const res = await fetch(`https://discord.com/api/guilds/${SERVER_ID}/widget.json`);
+                const res = await fetch(`https://discord.com/api/guilds/${SERVER_ID}/widget.json?t=${Date.now()}`);
                 const data = await res.json();
                 document.getElementById('online-count').innerText = data.presence_count || '0';
             } catch(e) { document.getElementById('online-count').innerText = '0'; }
         }
         fetchDiscord();
+        setInterval(fetchDiscord, 60000); // Auto-refresh every minute
     </script>
 </body>
 </html>
