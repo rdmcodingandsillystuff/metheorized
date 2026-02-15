@@ -1,12 +1,11 @@
 @echo off
 setlocal Enabledelayedexpansion
 
-:START
-:: --- AUTO-ADMIN ELEVATION ---
+:: --- CLEAN ADMIN ELEVATION ---
 net session >nul 2>&1
-if %errorLevel% NEQ 0 (
+if %errorLevel% neq 0 (
     echo [!] REQUESTING ADMIN PRIVILEGES...
-    powershell -Command "Start-Process -FilePath '%0' -Verb RunAs"
+    powershell -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
     exit /b
 )
 
@@ -17,12 +16,10 @@ color 0C
 :MENU
 cls
 echo.
-:: This command safely prints the ASCII art from the bottom of this file
-for /f "delims=" %%A in ('findstr /b "::: " "%~f0"') do (
-    set "line=%%A"
-    echo !line:~4!
-)
-
+echo  __  __  ____  _____  ____  _____  ____  ____  ____  ____  ____ 
+echo (  \/  )(  __)(_   _)(  __)(  _  )(  _ \(_  _)(_   )(  __)(  _ \
+echo  )    (  ) _)   )(   ) _)  )(_)(  )   / _)(_  / /_  ) _)  )(_) )
+echo (_/\/\_)(____) (__) (____)(_____)(_)\_)(____)(____)(____)(____/ 
 echo ======================================================================================
 echo    M E T E O R I Z E D   O M N I - O P T I M I Z E R   
 echo ======================================================================================
@@ -84,8 +81,3 @@ goto MENU
 :DISCORD
 start https://discord.gg/tUCfNwmWhD
 goto MENU
-
-:: --- DO NOT EDIT BELOW THIS LINE (ASCII ART DATA) ---
-::: ▄▄  ▄▄ ▄▄▄▄▄ ▄▄▄▄▄▄ ▄▄ ▄▄ ▄▄▄▄▄  ▄▄▄  ▄▄▄▄  ▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄  
-::: ██▀▄▀██ ██▄▄    ██   ██▄██ ██▄▄  ██▀██ ██▄█▄ ██   ▄█▀ ██▄▄  ██▀██ 
-::: ██   ██ ██▄▄▄   ██   ██ ██ ██▄▄▄ ▀███▀ ██ ██ ██ ▄██▄▄ ██▄▄▄ ████▀
