@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,14 +12,15 @@
             --border: rgba(255, 255, 255, 0.1);
         }
 
+        * { box-sizing: border-box; scroll-behavior: smooth; }
         body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
 
+        /* --- BACKGROUND & OVERLAY --- */
         .bg-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
             background: url('logo.png') center/cover no-repeat;
             filter: blur(12px) brightness(20%); transform: scale(1.1);
         }
-
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
@@ -28,33 +28,46 @@
             background-size: 100% 2px, 3px 100%; z-index: -1; pointer-events: none;
         }
 
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        /* --- NAVIGATION MENU --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); z-index: 100;
+        }
+        .nav-logo { font-weight: bold; letter-spacing: 2px; color: var(--accent-red); font-size: 1.2rem; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            color: #bbb; text-decoration: none; font-size: 0.9rem; font-weight: 600; 
+            transition: 0.3s; text-transform: uppercase;
+        }
+        .nav-links a:hover { color: #fff; text-shadow: 0 0 10px #fff; }
 
+        /* --- HERO SECTION --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         h1 {
             font-size: clamp(3rem, 10vw, 5rem); letter-spacing: 15px; margin: 0;
             background: linear-gradient(to bottom, #fff, #666);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 30px rgba(255, 77, 77, 0.3)); text-transform: uppercase;
         }
-
         .status-badge {
             margin: 30px 0; padding: 8px 24px; background: var(--glass);
             border: 1px solid rgba(0, 255, 0, 0.2); border-radius: 100px;
-            backdrop-filter: blur(10px); color: #3ba55c; font-weight: 600;
-            display: flex; align-items: center; gap: 10px;
+            color: #3ba55c; font-weight: 600; display: flex; align-items: center; gap: 10px;
         }
-
         .dot { width: 8px; height: 8px; background: #3ba55c; border-radius: 50%; box-shadow: 0 0 10px #3ba55c; }
 
         .join-btn { transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.2)); }
         .join-btn img { width: 320px; border-radius: 20px; }
         .join-btn:hover { transform: scale(1.05) translateY(-10px); filter: drop-shadow(0 0 30px rgba(88, 101, 242, 0.6)); }
 
-        .container { max-width: 900px; margin: -10vh auto 100px; padding: 0 20px; }
+        /* --- CONTENT CARDS --- */
+        .container { max-width: 900px; margin: 50px auto; padding: 0 20px; }
         .glass-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
             backdrop-filter: blur(20px); border: 1px solid var(--border);
-            border-radius: 30px; padding: 60px; text-align: center;
+            border-radius: 30px; padding: 60px; text-align: center; margin-bottom: 50px;
         }
 
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 25px; margin-top: 40px; text-align: left; }
@@ -74,23 +87,40 @@
 <body>
     <div class="bg-container"></div>
     <div class="overlay"></div>
+
+    <nav>
+        <div class="nav-logo">METHEORIZED</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#features">Features</a>
+            <a href="#download">Download</a>
+        </div>
+    </nav>
+
     <section class="hero">
         <h1>Metheorized</h1>
         <div class="status-badge"><span class="dot"></span> <span id="online-count">--</span> USERS ONLINE</div>
         <a href="https://discord.gg/tUCfNwmWhD" class="join-btn"><img src="discord.webp" alt="Join Discord"></a>
     </section>
-    <div class="container">
+
+    <div class="container" id="features">
         <div class="glass-card">
             <h2 style="color:var(--accent-red)">Omni-Optimizer</h2>
             <div class="features-grid">
-                <div class="feature-item"><h3> CPU Priority</h3><p>Optimizes Win32Priority for gaming performance.</p></div>
-                <div class="feature-item"><h3> GPU Boost</h3><p>Prioritizes graphics processing for higher FPS.</p></div>
-                <div class="feature-item"><h3> Net-Tuner</h3><p>Disables TCP Delay and flushes DNS cache.</p></div>
-                <div class="feature-item"><h3> RAM Purge</h3><p>Deep-cleans standby list and temp files.</p></div>
+                <div class="feature-item"><h3>⚡ CPU Priority</h3><p>Optimizes Win32Priority for gaming performance.</p></div>
+                <div class="feature-item"><h3>🎮 GPU Boost</h3><p>Prioritizes graphics processing for higher FPS.</p></div>
+                <div class="feature-item"><h3>🌐 Net-Tuner</h3><p>Disables TCP Delay and flushes DNS cache.</p></div>
+                <div class="feature-item"><h3>💾 RAM Purge</h3><p>Deep-cleans standby list and temp files.</p></div>
             </div>
-            <a href="metheorized.bat" class="download-link" download>GET THE SCRIPT →</a>
+        </div>
+
+        <div class="glass-card" id="download">
+            <h2 style="color:var(--accent-red)">Get Started</h2>
+            <p style="color: #888;">Download the 2026 update to eliminate latency and stabilize your frame times instantly.</p>
+            <a href="metheorized.bat" class="download-link" download>DOWNLOAD SCRIPT →</a>
         </div>
     </div>
+
     <script>
         const SERVER_ID = '1472191287691313337'; 
         async function fetchDiscord() {
