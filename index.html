@@ -3,97 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metheorized | Minecraft Community</title>
+    <title>Metheorized | Premium Optimization</title>
     <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
-        
-        /* BACKGROUND SETTINGS */
-        .bg-image {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('5n7d5jvred461.jpg') center/cover;
-            filter: blur(8px) brightness(25%);
-            z-index: -1; transform: scale(1.1);
+        :root {
+            --accent-red: #ff4d4d;
+            --discord-blue: #5865f2;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        
-        h1 { 
-            font-size: 4em; letter-spacing: 8px; color: #ff4d4d; margin: 0; 
-            text-shadow: 0 0 30px rgba(255, 77, 77, 0.6); 
-            animation: fadeIn 2s ease-in;
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            margin: 0; 
+            overflow-x: hidden; 
         }
 
-        /* CUSTOM DISCORD BUTTON */
-        .discord-btn {
-            display: inline-block; margin-top: 30px; transition: 0.4s;
+        /* --- THE BACKGROUND LAYER --- */
+        .bg-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            background: url('logo.png') center/cover no-repeat;
+            filter: blur(12px) brightness(20%); /* Super dark and blurry for that "Fancy" feel */
+            transform: scale(1.1);
+        }
+
+        /* Digital Scanline Overlay */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        /* Fancy Animated Title */
+        h1 {
+            font-size: clamp(3rem, 10vw, 5rem);
+            letter-spacing: 15px;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255, 77, 77, 0.3));
+            text-transform: uppercase;
+        }
+
+        .status-badge {
+            margin: 30px 0;
+            padding: 8px 24px;
+            background: var(--glass);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            border-radius: 100px;
+            backdrop-filter: blur(10px);
+            color: #3ba55c;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dot { width: 8px; height: 8px; background: #3ba55c; border-radius: 50%; box-shadow: 0 0 10px #3ba55c; }
+
+        /* Fancy Image Button */
+        .join-btn {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.2));
-            animation: pulse 2.5s infinite;
+            cursor: pointer;
         }
 
-        .discord-btn img { width: 350px; border-radius: 15px; }
-
-        .discord-btn:hover {
-            transform: scale(1.08);
-            filter: drop-shadow(0 0 25px rgba(88, 101, 242, 0.8));
+        .join-btn img {
+            width: 320px;
+            border-radius: 20px;
         }
 
-        /* ONLINE STATUS */
-        .online-status {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 255, 0, 0.3);
-            padding: 10px 25px; border-radius: 30px; margin: 20px; color: #3ba55c; font-weight: bold;
-            backdrop-filter: blur(5px);
+        .join-btn:hover {
+            transform: scale(1.05) translateY(-10px);
+            filter: drop-shadow(0 0 30px rgba(88, 101, 242, 0.6));
         }
 
-        /* SCROLL SECTIONS */
-        .section { padding: 120px 20px; text-align: center; opacity: 0; transform: translateY(50px); transition: 1.2s; }
-        .section.show { opacity: 1; transform: translateY(0); }
-        .box { background: rgba(22, 27, 34, 0.8); padding: 50px; border-radius: 25px; max-width: 700px; margin: auto; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-
-        /* ANIMATIONS */
-        @keyframes pulse {
-            0% { filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.3)); }
-            50% { filter: drop-shadow(0 0 20px rgba(88, 101, 242, 0.6)); }
-            100% { filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.3)); }
+        /* Fancy Content Section */
+        .container {
+            max-width: 900px;
+            margin: -10vh auto 100px;
+            padding: 0 20px;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .glass-card h2 {
+            color: var(--accent-red);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 15px 40px;
+            border: 1px solid var(--accent-red);
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .download-link:hover {
+            background: var(--accent-red);
+            box-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
+        }
+
     </style>
 </head>
 <body>
-    <div class="bg-image"></div>
 
-    <div class="hero">
-        <h1>METHEORIZED</h1>
-        <div class="online-status">● <span id="online-count">--</span> Players Online</div>
+    <div class="bg-container"></div>
+    <div class="overlay"></div>
+
+    <section class="hero">
+        <h1>Metheorized</h1>
+        <div class="status-badge">
+            <span class="dot"></span>
+            <span id="online-count">--</span> USERS ONLINE
+        </div>
         
-        <a href="https://discord.gg/tUCfNwmWhD" class="discord-btn">
-            <img src="discord.webp" alt="Join Our Discord">
+        <a href="https://discord.gg/tUCfNwmWhD" class="join-btn">
+            <img src="discord.webp" alt="Join Discord">
         </a>
-    </div>
+    </section>
 
-    <div class="section">
-        <div class="box">
-            <h2 style="color:#ff4d4d; font-size: 2.2em;">The 2026 Optimizer</h2>
-            <p style="font-size: 1.2em; line-height: 1.6; color: #ccc;">Experience zero input lag and maximum frame stability with the <b>Metheorized Omni-Optimizer</b>[cite: 9, 11]. Specifically tuned for competitive Minecraft.</p>
-            <a href="metheorized.bat" style="color:#ff4d4d; text-decoration:none; font-weight:bold; font-size: 1.3em;" download>Download Script →</a>
+    <div class="container">
+        <div class="glass-card">
+            <h2>Omni-Optimizer</h2>
+            <p style="color: #aaa; font-size: 1.2rem; line-height: 1.8;">
+                The ultimate registry overhaul for 2026. Eliminate latency, stabilize frame times, and dominate your competition with a single click.
+            </p>
+            <a href="metheorized.bat" class="download-link" download>GET THE SCRIPT →</a>
         </div>
     </div>
 
     <script>
         const SERVER_ID = '1238549669524045865'; 
-        async function getStats() {
+        async function fetchDiscord() {
             try {
                 const res = await fetch(`https://discord.com/api/guilds/${SERVER_ID}/widget.json`);
                 const data = await res.json();
                 document.getElementById('online-count').innerText = data.presence_count || '0';
             } catch(e) { document.getElementById('online-count').innerText = '0'; }
         }
-        getStats();
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
-        }, { threshold: 0.2 });
-        document.querySelectorAll('.section').forEach(s => observer.observe(s));
+        fetchDiscord();
     </script>
 </body>
 </html>
