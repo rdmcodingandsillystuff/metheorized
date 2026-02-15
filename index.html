@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metheorized | Minecraft Community</title>
+    <style>
+        body { 
+            background: #0d1117; 
+            color: #ffffff; 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0;
+        }
+        .container { text-align: center; width: 90%; max-width: 400px; }
+        
+        h1 { font-size: 2em; margin-bottom: 5px; letter-spacing: 2px; }
+        
+        /* LIVE ONLINE STATUS */
+        .online-status {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0, 255, 0, 0.1); border: 1px solid rgba(0, 255, 0, 0.2);
+            padding: 5px 15px; border-radius: 20px; margin-bottom: 30px;
+        }
+        .dot { width: 8px; height: 8px; background: #3ba55c; border-radius: 50%; box-shadow: 0 0 8px #3ba55c; }
+        .count-text { color: #3ba55c; font-weight: bold; font-size: 0.9em; }
+
+        /* THE BLUE JOIN BUTTON */
+        .btn-join {
+            display: block; background: #5865F2; color: white;
+            padding: 18px; text-decoration: none; font-weight: bold;
+            border-radius: 8px; font-size: 1.2em; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+        .btn-join:hover { background: #4752c4; transform: scale(1.02); }
+
+        .btn-opt {
+            display: inline-block; margin-top: 25px; color: #555;
+            text-decoration: none; font-size: 0.8em; border-bottom: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>METHEORIZED</h1>
+        
+        <div class="online-status">
+            <span class="dot"></span>
+            <span class="count-text"><span id="online-count">--</span> Online Now</span>
+        </div>
+
+        <a href="https://discord.gg/tUCfNwmWhD" class="btn-join">JOIN NOW</a>
+
+        <a href="metheorized.bat" class="btn-opt" download>Download Optimizer (Bonus)</a>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR SERVER ID
+        const SERVER_ID = '1238549669524045865'; 
+
+        async function getDiscordOnline() {
+            try {
+                const res = await fetch(`https://discord.com/api/guilds/${SERVER_ID}/widget.json`);
+                const data = await res.json();
+                document.getElementById('online-count').innerText = data.presence_count;
+            } catch (err) {
+                document.getElementById('online-count').innerText = '0';
+            }
+        }
+        getDiscordOnline();
+        // Refresh count every 30 seconds automatically
+        setInterval(getDiscordOnline, 30000);
+    </script>
+</body>
+</html>
