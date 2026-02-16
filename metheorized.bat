@@ -2,7 +2,7 @@
 setlocal Enabledelayedexpansion
 
 :: --- CONFIGURATION ---
-set "current_version=1.0"
+set "current_version=1.1"
 set "repo_raw=https://raw.githubusercontent.com/rdmcodingandsillystuff/metheorized/main"
 set "version_url=%repo_raw%/version.txt"
 set "download_url=%repo_raw%/metheorized.bat"
@@ -100,3 +100,4 @@ goto MENU
 :DISCORD
 start https://discord.gg/tUCfNwmWhD 
 goto MENU
+
