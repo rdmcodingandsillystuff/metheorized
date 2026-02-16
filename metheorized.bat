@@ -101,3 +101,4 @@ goto MENU
 start https://discord.gg/tUCfNwmWhD 
 goto MENU
 
+this worked if you are seeing this shit
