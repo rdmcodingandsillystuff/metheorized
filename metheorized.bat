@@ -1,44 +1,47 @@
 @echo off
 setlocal Enabledelayedexpansion
 
-:: --- CONFIGURATION ---
-set "current_version=1.1"
-set "repo_raw=https://raw.githubusercontent.com/rdmcodingandsillystuff/metheorized/main"
-set "version_url=%repo_raw%/version.txt"
-set "download_url=%repo_raw%/metheorized.bat"
-set "temp_version=%temp%\v_check.txt"
-
-:: --- AUTO-UPDATE LOGIC ---
-echo [*] Checking for updates...
-powershell -Command "(New-Object Net.WebClient).DownloadFile('%version_url%', '%temp_version%')" >nul 2>&1
-
-if exist "%temp_version%" (
-    set /p remote_version=<%temp_version%
-    if "!remote_version!" NEQ "%current_version%" (
-        echo [!] New version !remote_version! found. Downloading update...
-        powershell -Command "(New-Object Net.WebClient).DownloadFile('%download_url%', '%~nx0.new')" >nul 2>&1
-        
-        if exist "%~nx0.new" (
-            move /y "%~nx0.new" "%~nx0" >nul
-            echo [+] Update installed successfully. Restarting...
-            timeout /t 2 >nul
-            start "" "%~nx0"
-            exit /b
-        )
-    )
-    del "%temp_version%" >nul 2>&1
-) else (
-    echo [!] Could not connect to update server. Skipping...
-)
-
-:: --- ADMIN CHECK ---
-net session >nul 2>&1 
+:: --- ADMIN AUTO-PROMPT ---
+fsutil dirty query %systemdrive% >nul 2>&1
 if %errorLevel% neq 0 (
-    echo [!] PERMISSION REQUIRED: RIGHT-CLICK AND RUN AS ADMINISTRATOR 
-    pause 
-    exit /b 
+    echo [!] Requesting Administrative Privileges...
+    powershell -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+    exit /b
 )
 
+:: --- CONFIGURATION ---
+:: Using the RAW URL with a cache-busting timestamp
+set "url=https://raw.githubusercontent.com/rdmcodingandsillystuff/metheorized/main/metheorized.bat"
+
+:: --- THE UPDATE ENGINE ---
+if "%~1"=="--updated" (
+    if exist "%~f0.old" del /f /q "%~f0.old"
+    goto START_SCRIPT
+)
+
+echo [*] Checking for updates on GitHub...
+set "TEMP_FILE=%temp%\metheor_next.bat"
+
+:: Force download using a unique request to bypass GitHub's cache
+powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $web = New-Object Net.WebClient; $web.Headers.Add('Cache-Control','no-cache'); $v = Get-Date -UFormat '%%s'; $web.DownloadFile('%url%?v=$v', '%TEMP_FILE%')" >nul 2>&1
+
+if exist "%TEMP_FILE%" (
+    :: Verify the file contains actual code and isn't a 404 error
+    findstr /i "@echo" "%TEMP_FILE%" >nul
+    if !errorLevel! equ 0 (
+        echo [+] New version found. Applying changes...
+        :: We rename the current file to .old and move the new one in its place
+        ren "%~f0" "%~nx0.old"
+        move /y "%TEMP_FILE%" "%~f0" >nul
+        start "" "%~f0" --updated
+        exit /b
+    )
+)
+
+echo [!] No update applied (Server lag or no connection).
+timeout /t 2 >nul
+
+:START_SCRIPT
 title METHEORIZED OMNI-OPTIMIZER 2026 
 mode con: cols=100 lines=45 
 color 0C 
@@ -48,55 +51,63 @@ cls
 echo.
 echo  M E T H E O R I Z E D  -  O M N I  -  O P T I M I Z E R
 echo ======================================================================================
-echo    1. RUN TOTAL SYSTEM OVERHAUL
+echo    1. RUN TOTAL SYSTEM OVERHAUL (CPU, GPU, POWER)
 echo    2. DEEP RAM PURGE
-echo    3. REVERT TO WINDOWS DEFAULTS
-echo    4. JOIN THE DISCORD
-echo    5. EXIT
+echo    3. NETWORK ^& DNS FLUSH
+echo    4. REVERT TO WINDOWS DEFAULTS
+echo    5. JOIN THE DISCORD
+echo    6. EXIT
 echo ======================================================================================
-set /p "choice=Select (1-5): "
+set /p "choice=Select (1-6): "
 
 if "%choice%"=="1" goto OVERHAUL
 if "%choice%"=="2" goto PURGE 
-if "%choice%"=="3" goto REVERT 
-if "%choice%"=="4" goto DISCORD 
-if "%choice%"=="5" exit 
+if "%choice%"=="3" goto NETWORK
+if "%choice%"=="4" goto REVERT 
+if "%choice%"=="5" goto DISCORD 
+if "%choice%"=="6" exit 
 goto MENU 
 
 :OVERHAUL
 echo.
-echo [+] OPTIMIZING CPU... 
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >nul 2>&1 
-echo [+] BOOSTING GPU... 
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f >nul 2>&1 
-echo [+] TUNING NETWORK... 
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >nul 2>&1 
-ipconfig /flushdns >nul 2>&1 
-echo [+] CLEANING TEMP FILES... 
-taskkill /F /IM chrome.exe /T >nul 2>&1 
-taskkill /F /IM msedge.exe /T >nul 2>&1 
-del /s /f /q %temp%\*.* >nul 2>&1 
+echo [+] ENABLING ULTIMATE PERFORMANCE...
+powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 >nul 2>&1
+powercfg /setactive e9a42b02-d5df-448d-aa00-03f14749eb61 >nul 2>&1
+echo [+] OPTIMIZING CPU ^& GPU PRIORITY...
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f >nul 2>&1
+echo [+] CLEANING CACHE...
+del /s /f /q "%temp%\*.*" >nul 2>&1
 echo.
-echo OMNI-BOOST COMPLETE! 
+echo OMNI-BOOST COMPLETE!
 pause 
 goto MENU 
 
 :PURGE
 echo.
-echo [+] PURGING RAM... 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "[System.GC]::Collect();" >nul 2>&1 
+echo [+] PURGING RAM...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "[System.GC]::Collect();" >nul 2>&1
 echo [OK] RAM is now fresh.
 pause 
 goto MENU 
 
+:NETWORK
+echo.
+echo [+] FLUSHING DNS ^& STACK...
+ipconfig /flushdns >nul 2>&1
+netsh int ip reset >nul 2>&1
+echo [OK] Network optimized.
+pause
+goto MENU
+
 :REVERT
 echo.
-echo [+] REVERTING SETTINGS... 
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 2 /f >nul 2>&1 
-echo [OK] System set back to Default.
+echo [+] REVERTING...
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 2 /f >nul 2>&1
+echo [OK] Defaults restored.
 pause 
 goto MENU 
 
 :DISCORD
-start https://discord.gg/
+start https://discord.gg/tUCfNwmWhD
 goto MENU
