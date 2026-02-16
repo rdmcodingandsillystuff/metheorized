@@ -111,3 +111,5 @@ goto MENU
 :DISCORD
 start https://discord.gg/tUCfNwmWhD
 goto MENU
+holy it worked
+
