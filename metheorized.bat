@@ -98,7 +98,5 @@ pause
 goto MENU 
 
 :DISCORD
-start https://discord.gg/tUCfNwmWhD 
+start https://discord.gg/
 goto MENU
-
-this worked if you are seeing this shit
